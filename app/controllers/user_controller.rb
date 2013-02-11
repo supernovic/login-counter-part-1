@@ -28,7 +28,11 @@ class UserController < ApplicationController
   
   def reset
     @user = User.new(params[:user])
-    @user.TESTAPI_resetFixture()  
+    if @user.TESTAPI_resetFixture() 
+      respond_to do |format|
+        format.json{render :json => @user, :errCode}
+      end
+    end
   end
   
 end
