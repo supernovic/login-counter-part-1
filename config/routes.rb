@@ -61,4 +61,6 @@ Logincounter::Application.routes.draw do
   match '/users/add' => 'user#add'
   
   match '/TESTAPI/resetFixture' => 'user#reset'
+  
+  match '/TESTAPI/unitTests' => 'user#test'
 end
