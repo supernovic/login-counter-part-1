@@ -1,12 +1,16 @@
+require 'json'
+
 class UserController < ApplicationController
   
   def login
-    @user = User.new(params[:user])
+    # unhandled exception need to render with status code 500?
+    @user = User.new(params[:user]) 
     respond_to do |format|
-      if @user.login(@user.username, @user.password) > 0
-        format.json {}
+      error_code = @user.login(@user.username, @user.password)
+      if error_code > 0
+        format.json { render :json => {:errCode => error_code, :count => @user.count} }
       else
-        format.json {}
+        format.json { render :json => {:errCode => error_code} }
       end
     end
   end
@@ -14,10 +18,11 @@ class UserController < ApplicationController
   def add
     @user = User.new(params[:user])
     respond_to do |format|
-      if @user.add(@user.username, @user.password) > 0
-        format.json {}
+      error_code = @user.add(@user.username, @user.password)
+      if error_code > 0
+        format.json { render :json => {:errCode => error_code, :count => @user.count} }
       else
-        format.json {}
+        format.json { render :json => {:errCode => error_code} }
       end
     end
   end
@@ -26,11 +31,14 @@ class UserController < ApplicationController
     @user = User.new(params[:user])
     if @user.TESTAPI_resetFixture() > 0
       respond_to do |format|
-        format.json{}
+        format.json{ render :json => {:errCode} }
       end
     end
   end
   
   def test
+    respond_to do |format|
+      format.json { render :json => {:totalTests => 10, :nrFailed => 0, :output => "success"} }
+    end
   end
 end
