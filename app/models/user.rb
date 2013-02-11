@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   ERR_BAD_USERNAME      =  -3  # : (for add only) invalid user name (only empty string is invalid for now)
   ERR_BAD_PASSWORD      =  -4
   
-  def login(user, password)
+  def self.login(user, password)
     u = User.find_by_username_and_password(user, password)
     if u.nil?
       return ERR_BAD_CREDENTIALS
@@ -21,8 +21,8 @@ class User < ActiveRecord::Base
     end 
   end
   
-  def add(user, password)
-    if user.empty?
+  def self.add(user, password)
+    if user.empty? or user.length > 128
       return ERR_BAD_USERNAME
     end
     if password.length > 128
@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
     end
   end
   
-  def TESTAPI_resetFixture()
+  def self.TESTAPI_resetFixture()
     User.delete_all
     return SUCCESS
   end
