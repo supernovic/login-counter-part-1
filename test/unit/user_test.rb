@@ -65,4 +65,5 @@ class UserTest < ActiveSupport::TestCase
     assert User.TESTAPI_resetFixture() == 1
     assert User.login("hello", "universe") == -1
   end
+  
 end

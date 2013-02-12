@@ -20,13 +20,25 @@ class UserController < ApplicationController
   end
   
   def reset
-    @hash = {}
     resp = User.TESTAPI_resetFixture()
-    @hash[:errCode] = resp
-    render :json => @hash
+    render :json => {:errCode => resp}
   end
   
   def test
-    
+    @hash = {}
+    index = 0
+    test_results = `ruby -Itest test/unit/user_test.rb`
+    @hash[:output] = test_results
+    test_results.scan(/(\d+)\stests|(\d+)\sassertions|(\d+)\sfailures|(\d+)\serrors/).flatten.each { |num| 
+      if !num.nil?
+        if index == 0
+          @hash[:totalTests] = num.to_i
+        elsif index == 2
+          @hash[:nrFailed] = num.to_i
+        end
+        index += 1
+      end
+    }
+    render :json => @hash
   end
 end
