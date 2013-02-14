@@ -2,20 +2,20 @@ class UserController < ApplicationController
   
   def login
     # unhandled exception need to render with status code 500?
-    resp = User.login(@user.username, @user.password)
+    resp = User.login(params[:user], params[:password])
     if resp > 0
-      render :json => {:errCode => error_code, :count => resp}
+      render :json => {:errCode => resp, :count => resp}
     else
-      render :json => {:errCode => error_code}
+      render :json => {:errCode => resp}
     end
   end
   
   def add
-    error_code = User.add(params[:user], params[:password])
-    if error_code > 0
-      render :json => {:errCode => error_code, :count => 1}
+    resp = User.add(params[:user], params[:password])
+    if resp > 0
+      render :json => {:errCode => resp, :count => 1}
     else
-      render :json => {:errCode => error_code} 
+      render :json => {:errCode => resp} 
     end
   end
   
